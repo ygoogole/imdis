@@ -3,5 +3,5 @@ project(imdis)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES imdis-server.cpp TcpHandler.cpp TcpHandler.h Common.h)
+set(SOURCE_FILES imdis-server.cpp TcpHandler.cpp TcpHandler.h Common.h Epoller.cpp Epoller.h)
 add_executable(imdis ${SOURCE_FILES})
