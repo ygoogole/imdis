@@ -6,6 +6,7 @@
 #define IMDIS_COMMON_H
 
 #include <memory>
+#include <vector>
 
 namespace imdis{
 
@@ -15,7 +16,13 @@ namespace imdis{
         TCP_NET_ERROR = -1,
     };
 
+    enum{
+        max_io_event = 256,
+    };
+
     class Epoller;
-    extern std::shared_ptr<imdis::Epoller> epoller_;
+    extern std::shared_ptr<imdis::Epoller> epoller;
+    extern imdis::fd_t fd_server;
+    //extern std::vector<std::shared_ptr<struct epoll_event> >
 }
 #endif //IMDIS_COMMON_H

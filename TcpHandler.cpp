@@ -30,7 +30,7 @@ imdis::fd_t imdis::TcpHandler::tcp_bind() {
     sa.sin_port = htons(port_);
     sa.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    const char *addr = "127.0.0.1";
+    const char *addr = "192.168.50.138";
     if (inet_aton(addr, &sa.sin_addr) == 0) {
         close(s);
         return TCP_NET_ERROR;
