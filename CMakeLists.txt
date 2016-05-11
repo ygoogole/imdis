@@ -3,8 +3,10 @@ project(imdis)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES imdis-server.cpp TcpHandler.cpp TcpHandler.h Common.h Epoller.cpp Epoller.h)
+add_subdirectory(server)
+add_subdirectory(client)
+#set(SOURCE_FILES TcpHandler.cpp TcpHandler.h Common.h)
 
-FIND_PACKAGE(Threads REQUIRED)
-add_executable(imdis ${SOURCE_FILES})
-target_link_libraries( imdis ${CMAKE_THREAD_LIBS_INIT} )
+#FIND_PACKAGE(Threads REQUIRED)
+#add_executable(imdis ${SOURCE_FILES})
+#target_link_libraries( imdis ${CMAKE_THREAD_LIBS_INIT} )
