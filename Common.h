@@ -23,6 +23,8 @@ namespace imdis{
     class Epoller;
     extern std::shared_ptr<imdis::Epoller> epoller;
     extern imdis::fd_t fd_server;
+    extern std::string bind_addr;
+    extern uint16_t port;
     //extern std::vector<std::shared_ptr<struct epoll_event> >
 }
 #endif //IMDIS_COMMON_H

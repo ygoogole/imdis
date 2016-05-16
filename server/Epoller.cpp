@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <iostream>
 #include <unistd.h>
+#include <cstring>
 
 int imdis::Epoller::add_fd(imdis::fd_t epfd, imdis::fd_t fd, epoll_event *ev) {
 
@@ -49,6 +50,7 @@ int imdis::Epoller::rm_fd(fd_t epfd, fd_t fd, epoll_event *ev) {
 int imdis::Epoller::set_pollin(fd_t epfd, epoll_event *ev) {
 
     ev->events |= EPOLLIN;
+    ev->events |= EPOLLET;
 
     return epoll_ctl(epfd, EPOLL_CTL_MOD, ev->data.fd, ev);
 }
@@ -98,6 +100,7 @@ void imdis::Epoller::server_loop() {
             if (ev_buf[i].events & EPOLLIN){
                 fd_t fd = handle_conection_request();
                 std::cout << "accpeted fd = " << fd << std::endl;
+                TcpHandler::tcp_setnonblock(fd);
                 //std::shared_ptr<struct epoll_event> evt_ptr = std::make_shared<struct epoll_event>();
                 struct epoll_event ev;
                 add_fd(epfd_io_, fd, &ev);
@@ -111,13 +114,15 @@ void imdis::Epoller::server_loop() {
 void imdis::Epoller::io_loop() {
 
     std::cout << "looping in io_loop" << std::endl;
-    struct epoll_event ev_buf[max_io_event];
 
+    int n;
     while(!stop_io_){
 
         // -1, block forever,
         // 0, return right away
-        int n = epoll_wait(epfd_io_, &ev_buf[0], max_io_event, -1);
+
+        struct epoll_event ev_buf[max_io_event];
+        n = epoll_wait(epfd_io_, &ev_buf[0], max_io_event, 0);
 
         for (int i = 0; i < n; ++i){
 
@@ -139,6 +144,8 @@ void imdis::Epoller::io_loop() {
                 // reply to client
             }
         }
+
+        n = 0;
     }
 }
 
@@ -162,10 +169,17 @@ imdis::fd_t imdis::Epoller::handle_conection_request() {
 
 void imdis::Epoller::read_in(fd_t fd) {
 
-    char buf[10];
-    ssize_t n = read(fd, buf, 10);
+    char buf[1024];
+    ssize_t n = TcpHandler::tcp_read(fd, buf, 1024);
+
+    std::string tmp = buf;
+    std::string cmd = tmp.substr(0, n-1);
 
     std::cout << n << " bytes read from socket " << fd << std::endl;
+    std::cout << "recevied command :" << cmd << " length :" << cmd.size() << std::endl;
+
+    std::cout << "received cmd length :" << cmd.size() << std::endl;
+    return ;
 }
 
 

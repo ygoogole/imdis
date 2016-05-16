@@ -13,8 +13,10 @@ namespace imdis{
     imdis::fd_t fd_server;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     cout << "Hello, World!" << endl;
+    assert (argc == 2);
+    imdis::bind_addr = argv[1];
 
     imdis::fd_server = imdis::TcpHandler::tcp_bind();
     if (imdis::fd_server == imdis::TCP_NET_ERROR){
