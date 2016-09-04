@@ -3,3 +3,11 @@
 //
 
 #include "ClientHandler.h"
+
+void imdis::ClientHandler::read_query() {
+
+}
+
+void imdis::ClientHandler::handle() {
+
+}

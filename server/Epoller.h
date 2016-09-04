@@ -5,10 +5,12 @@
 #ifndef IMDIS_EPOLLER_H
 #define IMDIS_EPOLLER_H
 
-#include "../Common.h"
+#include "Common.h"
+#include "ClientHandler.h"
 #include <sys/epoll.h>
 #include <memory>
 #include <thread>
+#include <map>
 
 namespace imdis{
 
@@ -52,6 +54,8 @@ namespace imdis{
 
 
         void read_in(fd_t fd);
+
+        std::map<fd_t, std::shared_ptr<imdis::ClientHandler> > fd_to_client_handler_;
     };
 
 }

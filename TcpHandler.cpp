@@ -41,7 +41,8 @@ imdis::fd_t imdis::TcpHandler::tcp_bind() {
         return TCP_NET_ERROR;
     }
 
-    if (bind(s, (struct sockaddr*)&sa, sizeof(sa)) == -1){
+    int ret = 0;
+    if ( (ret = bind(s, (struct sockaddr*)&sa, sizeof(sa))) == -1){
         close(s);
         return TCP_NET_ERROR;
     }

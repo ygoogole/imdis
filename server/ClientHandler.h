@@ -5,10 +5,25 @@
 #ifndef IMDIS_CLIENTHANDLER_H
 #define IMDIS_CLIENTHANDLER_H
 
+#include <Common.h>
 
-class ClientHandler {
+namespace imdis{
 
-};
+    class ClientHandler {
+
+    public:
+        ClientHandler(fd_t fd)
+                :fd_(fd)
+        {}
+
+        void read_query();
+        void handle();
+
+    private:
+        fd_t fd_;
+    };
+
+}
 
 
 #endif //IMDIS_CLIENTHANDLER_H

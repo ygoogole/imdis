@@ -12,7 +12,12 @@ set(SOURCE_FILES
     ../Common.h
     Epoller.cpp
     Epoller.h
-)
+    Command.cpp 
+    Command.h 
+    ClientHandler.cpp 
+    ClientHandler.h
+    
+    )
 
 FIND_PACKAGE(Threads REQUIRED)
 add_executable(imdis-server ${SOURCE_FILES})

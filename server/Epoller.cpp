@@ -3,7 +3,8 @@
 //
 
 #include "Epoller.h"
-#include "../TcpHandler.h"
+#include "TcpHandler.h"
+#include "ClientHandler.h"
 #include <sys/epoll.h>
 #include <assert.h>
 #include <iostream>
@@ -58,6 +59,7 @@ int imdis::Epoller::set_pollin(fd_t epfd, epoll_event *ev) {
 int imdis::Epoller::set_pollout(fd_t epfd, epoll_event *ev) {
 
     ev->events |= EPOLLOUT;
+    ev->events |= EPOLLET;
 
     return epoll_ctl(epfd, EPOLL_CTL_MOD, ev->data.fd, ev);
 }
@@ -99,7 +101,7 @@ void imdis::Epoller::server_loop() {
 
             if (ev_buf[i].events & EPOLLIN){
                 fd_t fd = handle_conection_request();
-                std::cout << "accpeted fd = " << fd << std::endl;
+                std::cout << "accepted fd = " << fd << std::endl;
                 TcpHandler::tcp_setnonblock(fd);
                 //std::shared_ptr<struct epoll_event> evt_ptr = std::make_shared<struct epoll_event>();
                 struct epoll_event ev;
@@ -173,40 +175,28 @@ void imdis::Epoller::read_in(fd_t fd) {
     ssize_t n = TcpHandler::tcp_read(fd, buf, 1024);
 
     std::string tmp = buf;
-    std::string cmd = tmp.substr(0, n-1);
+    std::string cmd = tmp.substr(0, n);
 
     std::cout << n << " bytes read from socket " << fd << std::endl;
-    std::cout << "recevied command :" << cmd << " length :" << cmd.size() << std::endl;
+    std::cout << "received command :" << cmd << " length :" << cmd.size() << std::endl;
 
     std::cout << "received cmd length :" << cmd.size() << std::endl;
+
+    /*
+    std::shared_ptr<ClientHandler> client_handler;
+    auto iter = fd_to_client_handler_.find(fd);
+    if (iter == fd_to_client_handler_.end()){
+        client_handler = std::make_shared<ClientHandler>(fd);
+        fd_to_client_handler_.insert(std::make_pair(fd, client_handler));
+    } else{
+        client_handler = iter->second;
+    }
+
+    client_handler->handle();
+*/
+    //maybe no need to have fd_to_handler map
+    //push cmd to process queue
+    //send to event to queue handler to process cmds from queue
+
     return ;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
