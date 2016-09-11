@@ -171,6 +171,9 @@ imdis::fd_t imdis::Epoller::handle_conection_request() {
 
 void imdis::Epoller::read_in(fd_t fd) {
 
+    // fd should be added to lock free queue ,
+    // tcp_read() is called in handler thread
+
     char buf[1024];
     ssize_t n = TcpHandler::tcp_read(fd, buf, 1024);
 
